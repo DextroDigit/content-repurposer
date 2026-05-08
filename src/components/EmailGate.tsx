@@ -40,46 +40,55 @@ export default function EmailGate({ onEmailSubmitted }: Props) {
   };
 
   return (
-    <div className="mx-auto mt-8 max-w-md rounded-lg border border-emerald-500/20 bg-zinc-800/30 p-6 text-center">
-      <p className="text-sm text-zinc-300 mb-1 font-medium">
-        One last step
-      </p>
-      <p className="text-xs text-zinc-400 mb-4">
-        Enter your email to generate posts. I&apos;ll send you a copy so you
-        don&apos;t lose them, and let you know when new features launch. No spam.
-      </p>
+    <div className="mx-auto mt-8 max-w-md animate-fade-in">
+      <div className="rounded-2xl bg-white/[0.03] ring-1 ring-white/[0.08] p-6 text-center backdrop-blur-sm">
+        <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 ring-1 ring-emerald-500/20">
+          <svg className="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+        </div>
 
-      <div className="flex gap-2">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setError(null);
-          }}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-          placeholder="you@example.com"
-          className="flex-1 rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2
-            text-sm text-white placeholder-zinc-500 outline-none
-            focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30
-            transition-colors"
-        />
-        <button
-          onClick={handleSubmit}
-          disabled={!email.trim() || loading}
-          className="rounded-lg px-4 py-2 text-sm font-semibold
-            bg-gradient-to-r from-emerald-500 to-green-500 text-black
-            hover:from-emerald-400 hover:to-green-400
-            disabled:opacity-40 disabled:cursor-not-allowed
-            transition-all duration-200 whitespace-nowrap"
-        >
-          {loading ? "..." : "Get Posts"}
-        </button>
+        <p className="text-sm font-semibold text-white mb-1">
+          Enter your email to generate
+        </p>
+        <p className="text-xs text-zinc-400 mb-5 leading-relaxed">
+          Your posts will be ready instantly. I&apos;ll also email you a copy so
+          you don&apos;t lose them. No spam, unsubscribe anytime.
+        </p>
+
+        <div className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(null);
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+            placeholder="you@example.com"
+            className="flex-1 rounded-xl bg-white/[0.05] px-4 py-3
+              text-sm text-white placeholder-zinc-500 outline-none
+              ring-1 ring-white/[0.08]
+              focus:ring-2 focus:ring-emerald-500/40
+              transition-all duration-200"
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={!email.trim() || loading}
+            className="rounded-xl px-5 py-3 text-sm font-semibold
+              bg-gradient-to-r from-emerald-500 to-teal-500 text-black
+              hover:from-emerald-400 hover:to-teal-400
+              disabled:opacity-30 disabled:cursor-not-allowed
+              transition-all duration-200 whitespace-nowrap btn-glow"
+          >
+            {loading ? "..." : "Generate →"}
+          </button>
+        </div>
+
+        {error && (
+          <p className="mt-3 text-xs text-red-400">{error}</p>
+        )}
       </div>
-
-      {error && (
-        <p className="mt-3 text-xs text-red-400">{error}</p>
-      )}
     </div>
   );
 }

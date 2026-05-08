@@ -2,25 +2,82 @@
 
 body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background: #09090b;
 }
 
-/* Shimmer animation for loading skeleton */
+/* Dot grid background */
+.bg-dot-grid {
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Animated gradient text */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #22c55e 0%, #06b6d4 25%, #8b5cf6 50%, #ec4899 75%, #f59e0b 100%);
+  background-size: 300% 300%;
+  animation: gradient-shift 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer animation */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    rgb(39 39 42 / 0.4) 25%,
-    rgb(39 39 42 / 0.8) 50%,
-    rgb(39 39 42 / 0.4) 75%
+    rgb(39 39 42 / 0.3) 25%,
+    rgb(63 63 70 / 0.6) 50%,
+    rgb(39 39 42 / 0.3) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
+}
+
+/* Fade in up */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.animate-fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.animate-fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.animate-fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.animate-fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+.animate-fade-in-delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+/* Glass card */
+.glass-card {
+  background: rgb(255 255 255 / 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(255 255 255 / 0.06);
+}
+
+/* Pulses glow for generate button */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgb(34 197 94 / 0.15); }
+  50% { box-shadow: 0 0 40px rgb(34 197 94 / 0.3); }
+}
+
+.btn-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
