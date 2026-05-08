@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import InputPanel from "@/components/InputPanel";
-import GenerateButton from "@/components/GenerateButton";
 import OutputGrid from "@/components/OutputGrid";
 import ErrorMessage from "@/components/ErrorMessage";
+import EmailGate from "@/components/EmailGate";
 import type { GenerateResponse } from "@/lib/types";
 
 export default function Home() {
@@ -13,12 +13,12 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [output, setOutput] = useState<GenerateResponse | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  const handleGenerate = async () => {
-    if (!inputValue.trim()) return;
-
-    setLoading(true);
+  const handleEmailSubmitted = async (email: string) => {
+    setUserEmail(email);
     setError(null);
+    setLoading(true);
     setOutput(null);
 
     try {
@@ -46,6 +46,13 @@ export default function Home() {
     }
   };
 
+  const handleReset = () => {
+    setOutput(null);
+    setUserEmail(null);
+    setInputValue("");
+    setError(null);
+  };
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:py-20">
       {/* Header */}
@@ -55,30 +62,30 @@ export default function Home() {
         </h1>
         <p className="mt-3 text-sm sm:text-base text-zinc-400 max-w-lg mx-auto">
           Turn one blog post into 15+ scroll-stopping social posts for
-          Twitter, LinkedIn, Instagram, Facebook, and TikTok — in one click.
+          Twitter, LinkedIn, Instagram, Facebook, and TikTok — free.
         </p>
       </div>
 
       {/* Input */}
-      <InputPanel
-        inputType={inputType}
-        onInputTypeChange={(type) => {
-          setInputType(type);
-          setError(null);
-        }}
-        value={inputValue}
-        onValueChange={(val) => {
-          setInputValue(val);
-          setError(null);
-        }}
-      />
+      {!output && (
+        <InputPanel
+          inputType={inputType}
+          onInputTypeChange={(type) => {
+            setInputType(type);
+            setError(null);
+          }}
+          value={inputValue}
+          onValueChange={(val) => {
+            setInputValue(val);
+            setError(null);
+          }}
+        />
+      )}
 
-      {/* Generate Button */}
-      <GenerateButton
-        loading={loading}
-        disabled={!inputValue.trim()}
-        onClick={handleGenerate}
-      />
+      {/* Email Gate — shown when content is ready but email not yet given */}
+      {!userEmail && inputValue.trim() && !loading && !output && (
+        <EmailGate onEmailSubmitted={handleEmailSubmitted} />
+      )}
 
       {/* Error */}
       {error && <ErrorMessage message={error} />}
@@ -110,21 +117,32 @@ export default function Home() {
       )}
 
       {/* Empty State */}
-      {!loading && !error && !output && (
+      {!loading && !error && !output && !inputValue.trim() && (
         <div className="mx-auto mt-12 max-w-lg text-center">
           <div className="text-4xl mb-4 opacity-30">✨</div>
           <p className="text-sm text-zinc-500">
-            Paste a blog post URL or article text above and click{" "}
-            <span className="text-zinc-400 font-medium">
-              Generate Social Posts
-            </span>{" "}
-            to get started.
+            Paste a blog post URL or article text above to get started.
           </p>
         </div>
       )}
 
       {/* Output */}
-      {output && !loading && <OutputGrid data={output} />}
+      {output && !loading && (
+        <>
+          <div className="mx-auto mt-8 mb-6 max-w-5xl flex items-center justify-between">
+            <p className="text-sm text-zinc-400">
+              Generated for <span className="text-emerald-400">{userEmail}</span>
+            </p>
+            <button
+              onClick={handleReset}
+              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Repurpose another →
+            </button>
+          </div>
+          <OutputGrid data={output} />
+        </>
+      )}
     </main>
   );
 }
