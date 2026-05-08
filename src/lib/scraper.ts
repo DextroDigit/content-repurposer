@@ -1,6 +1,5 @@
-import { JSDOM } from "jsdom";
-
-// Dynamic import because readability is ESM-only
+// Both jsdom and readability are dynamically imported because they
+// have native deps that fail on Vercel serverless if loaded at import time.
 export async function scrapeUrl(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
@@ -15,8 +14,9 @@ export async function scrapeUrl(url: string): Promise<string> {
   }
 
   const html = await response.text();
-  const doc = new JSDOM(html, { url });
+  const { JSDOM } = await import("jsdom");
   const { Readability } = await import("@mozilla/readability");
+  const doc = new JSDOM(html, { url });
 
   const reader = new Readability(doc.window.document);
   const article = reader.parse();
